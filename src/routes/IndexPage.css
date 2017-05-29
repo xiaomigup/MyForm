@@ -1,0 +1,45 @@
+
+.normal {
+  font-family: Georgia, sans-serif;
+  margin-top: 3em;
+  text-align: center;
+  color: red;
+}
+.Header{
+  position: relative;
+  background: #999;
+}
+.editBtn{
+    position: absolute;
+    left: 40%;
+    top: 15px;
+    background: 
+}
+.previewBtn{
+    position: absolute;
+    left: 85%;
+    
+}
+.trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 16px; 
+  cursor: pointer;
+  transition: color .3s;
+}
+.editBox{
+  position: absolute;
+  height: 100%;
+  width: 1200px; 
+  background: rgba(255,255,255,0.9);
+}
+.moveback{
+    left : 0px;
+}
+.slideMove{
+    left : -85%;
+}
+
+.onforce:focus{
+    border-style: dashed;
+}

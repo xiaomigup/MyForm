@@ -1,0 +1,44 @@
+
+.normal {
+    position: relative;
+    width: 800px;
+    border: 2px solid #ccc;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+.del{
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 24px;
+    padding: 0;
+    line-height: 24px;
+    height: 36px;
+    width: 36px;
+    text-align: center;
+    border-radius: 50%;
+}
+.icon{
+    position: absolute;
+    left: -17px;
+    bottom:-17px;
+    font-size: 34px;
+    padding: 0;
+    line-height: 34px;
+    height: 34px;
+    width: 34px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.delBtn {
+  cursor: pointer;
+  position: relative;
+  top: 4px;
+  font-size: 24px;
+  color: #999;
+  transition: all .3s;
+}
+.delBtn:hover {
+  color: lightskyblue;
+}

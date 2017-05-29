@@ -1,0 +1,10 @@
+
+.normal {
+    margin-top: 50PX;
+    padding-left: 200px;
+    font-size: 20px;
+    overflow: auto;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}

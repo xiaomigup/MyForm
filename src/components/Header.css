@@ -1,0 +1,25 @@
+
+.header{
+  position: relative;
+  width: 100%;
+  height: 80px;
+  background: #eee;
+}
+.header .logo{
+  position: absolute;
+  left: 10%;
+  top: 20%;
+  font-size: 34px;
+
+}
+.loginBtn{
+  position: absolute;
+  left: 80%;
+  top: 35%;
+  margin-right: 15px;
+}
+.signinBtn{
+  position: absolute;
+  left: 86%;
+  top: 35%;
+}
