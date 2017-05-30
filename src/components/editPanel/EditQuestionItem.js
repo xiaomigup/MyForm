@@ -55,12 +55,22 @@ function EditQuestionItem({
       setTimeout(() => {
         const data = {
           ...getFieldsValue(),
+          index,
           qId,
           type,
           defaultValue,
         };
-        if(type === '文本'){
-          data.options = new Array(options).fill('text')
+        if (type === '填空') {
+          const arr = [];
+          let i = 0;
+          const str = getFieldValue('title');
+          const myRe = /(\_{3,})/g;
+          let myArray;
+          while (myRe.exec(str) !== null) {
+            arr[i] = options[i] || 'text';
+            i++;
+          }
+          data.options = arr;
         }
         dispatch({
           type: 'formModel/changQuestion',
@@ -77,10 +87,15 @@ function EditQuestionItem({
         });
   }
   const removeOptionItem = () =>{
+    const data = {
+      qId,
+      index
+    };
+      console.log(data);
+      console.log('==============');
       dispatch({
           type: 'formModel/removeOptionItem',
-          payload: qId,
-          
+          payload: data
       });
   }
   const delQuestion = () => {
@@ -102,18 +117,22 @@ function EditQuestionItem({
         return '字数限制';
     }
   };
-  const optionsEle = (index) => {
+  const optionsEle = (item,index) => {
     switch (type) {
       case '单选':
       case '多选':
-          return <p><Input style={{width:'80%',marginRight:'20px'}}  onChange={changQuestion}/><Icon
-            className={styles.delBtn}
-            type="minus-circle-o"
-            onClick={removeOptionItem}
-            style={{fontSize:'20px'}}
-          /></p>
+          return <p key={index}>
+                    <Input style={{width:'80%',marginRight:'20px'}}  onChange={changQuestion} defaultValue = {item}/>
+                    <Icon
+                      className={styles.delBtn}
+                      type="minus-circle-o"
+                      onClick={removeOptionItem}
+                      style={{fontSize:'20px'}}
+                    />
+                </p>
       case '评分':
-        return <p><Input style={{width:'30%',marginRight:'20px'}} onChange={changQuestion} />
+        return <p key={index}>
+                  <Input style={{width:'30%',marginRight:'20px'}} onChange={changQuestion} defaultValue = {item}/>
                   <Rate character={<Icon type="heart" />} allowHalf />
                   <Icon
                       className={styles.delBtn}
@@ -139,18 +158,18 @@ function EditQuestionItem({
       case '单选':
       case '多选':
       case '评分':
-        return <FormItem {...formAddItemLayout}>
+        return (<FormItem {...formAddItemLayout} key={index}>
                   <Button type="dashed" onClick={addOptionItem} style={{ width: '60%' }}>
                     <Icon type="plus" /> 增加选项
                   </Button>
-                </FormItem>
+                </FormItem>);
       case '填空':
       case '文本':
         return '';
     }
   };
   return (
-    <div >
+    <div style={{marginTop: 20}}>
 
       <Form layout="horizontal" className={styles.normal}>
         <div>
@@ -162,8 +181,8 @@ function EditQuestionItem({
             })(<Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="cross" />} defaultChecked={isReuired} onChange={changQuestion} />)}
           </FormItem>
           <div className={styles.del}>
-            <Button style={{ padding: 5 }}>
-              <Icon type="delete" onClick={delQuestion} />
+            <Button style={{ padding: 5,marginTop: 5 }}>
+              <Icon type="delete" onClick={delQuestion} style={{fontSize:20}}/>
             </Button>
           </div>
         </div>
@@ -184,8 +203,7 @@ function EditQuestionItem({
 
         <div>选项内容</div>
 
-        {(() => {
-          return options.map((item, index) => {
+        { options.map((item, index) => {
             return (
               <FormItem
                 label={optionsLabel(index)} {...formItemLayout}
@@ -193,11 +211,10 @@ function EditQuestionItem({
               >
                 {getFieldDecorator(`options[${index}]`, {
                   initialValue: item,
-                })(optionsEle(index))}
+                })(optionsEle(item,index))}
               </FormItem>
             );
-          });
-        })()}
+          })}
         {addItemEle(index)}
         <Button className={styles.icon}><Icon type="plus" style={{ transform: 'translate(0px,-3px)',fontSize:'30px'}} /></Button>
       </Form>

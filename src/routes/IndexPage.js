@@ -43,7 +43,7 @@ class IndexPage extends React.PureComponent {
     </Header>
     <Layout style={{position:'relative',height:'100%' }}>
       <QuestionPanel style={{background:'#fff'}}/>
-      <div style={{position: 'absolute',height: '100%',width: '100%', background: 'rgba(255,255,255,0.9)',transition:'all 1s ease 0s'}} className={ this.state.collapsed ? styles.slideMove : styles.moveback}> 
+      <div style={{position: 'absolute',height: '100%',width: '95%', background: 'rgba(255,255,255,0.9)',transition:'all 1s ease 0s'}} className={ this.state.collapsed ? styles.slideMove : styles.moveback}> 
             <Button style={{width:'50px',height:'40px',border:'none',position: 'absolute',top: '50%',left: '100%',transform: 'translate(0,-50%)'}} className={styles.goRight} onClick={this.changeEditBox} className={ this.state.collapsed ? styles.cur : ""}>
               <Icon 
                     type="double-right"

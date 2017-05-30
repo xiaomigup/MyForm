@@ -6,6 +6,7 @@ export default {
     topic: '卷的标题',
     illustrate: '卷说明',
     id: 0,
+    optionChooseBox : 0,
     question: [
       // 单选0
       {
@@ -107,9 +108,35 @@ export default {
       }
     },
     removeOptionItem(state, {payload}){
-      console.log(state);
-      console.log(payload);
-    }
+          // console.log(payload);
+          // var index = R.findIndex(R.propEq("qId", payload),state.question);
+          // if(index > -1)
+          // {
+          //   var optionList = state.question[index].options;
+          //   optionList = R.remove("index",1)(optionList);
+          //   var questionItem = R.assocPath(['options'], optionList, state.question[index]);
+          //   var stateTmp = R.assocPath(['question', index],questionItem, state);
+          //   console.log(stateTmp)
+          //   return stateTmp;
+          // }
+          // else
+          // {
+          //   console.log("未找到questionItem")
+          // }
+          var questionIndex = R.findIndex(R.propEq("qId", payload.qId), state.question);
+          console.log("+++++++++++++" + questionIndex);
+          console.log("+++++++++++++" + state);
+          if(questionIndex > -1)
+          {
+            var optionList = state.question[questionIndex].options;
+            optionList = R.remove(payload.index,1)(optionList);
+            console.log("+++++++++++++" + optionList);
+            var questionItem = R.assocPath(['options'], optionList, state.question[questionIndex]);
+            var stateTmp = R.assocPath(['question', questionIndex],questionItem, state);
+            console.log("*************" +stateTmp);
+            return stateTmp;
+          }
+    },
   },
   effects: {},
   subscriptions: {},

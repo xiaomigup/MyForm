@@ -7,15 +7,17 @@ import { Form, Input, InputNumber, Modal, Button,Icon } from 'antd';
 class EditTopicItem extends React.Component {
    constructor({ changeTopic, defaultTopic, changeIllustrate, defaultIll }){
     super();
+    this.state = {
+      isChooseBoxShow : false,
+    };
   }
-  state = {
-    isChooseBoxShow : false,
-  };
   changeState = () => {
     this.setState({
-      isChooseBoxShow : !isChooseBoxShow,
+      isChooseBoxShow : !this.state.isChooseBoxShow
     });
-      
+      console.log('====================================');
+      console.log(this.state.isChooseBoxShow);
+      console.log('====================================');
   }
   render(){
   return (
@@ -31,9 +33,9 @@ class EditTopicItem extends React.Component {
         </div>
         <Button className={styles.icon}><Icon type="plus" style={{transform: 'translate(0px,-3px)',fontSize:'30px'}} onClick={this.changeState}/></Button>
       </div>
-      <div className={ this.state.isChooseBoxShow ? styles.chooseBoxShow : "" } >
-          <ChooseQuestion  qId={-1} />
-      </div>
+      {/*<div className={ this.state.isChooseBoxShow ? styles.chooseBoxShow : "" } style={{display:'none'}} >*/}
+         {this.state.isChooseBoxShow ? <ChooseQuestion  qId={-1} /> : ''} 
+      {/*</div>*/}
     </div>
    );
   }
