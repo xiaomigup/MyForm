@@ -35,6 +35,7 @@ function EditQuestionItem({
     getFieldDecorator,
     validateFields,
     getFieldsValue,
+    getFieldValue,
   },
   type = '单选',
   title = '',
@@ -86,13 +87,11 @@ function EditQuestionItem({
           payload: qId,
         });
   }
-  const removeOptionItem = () =>{
+  const removeOptionItem = (index) =>{
     const data = {
       qId,
       index
     };
-      console.log(data);
-      console.log('==============');
       dispatch({
           type: 'formModel/removeOptionItem',
           payload: data
@@ -121,36 +120,47 @@ function EditQuestionItem({
     switch (type) {
       case '单选':
       case '多选':
-          return <p key={index}>
-                    <Input style={{width:'80%',marginRight:'20px'}}  onChange={changQuestion} defaultValue = {item}/>
-                    <Icon
-                      className={styles.delBtn}
-                      type="minus-circle-o"
-                      onClick={removeOptionItem}
-                      style={{fontSize:'20px'}}
-                    />
-                </p>
+          return  <Input style={{width:'80%',marginRight:'20px'}}  onChange={changQuestion}/>
+                    
+                
       case '评分':
-        return <p key={index}>
-                  <Input style={{width:'30%',marginRight:'20px'}} onChange={changQuestion} defaultValue = {item}/>
-                  <Rate character={<Icon type="heart" />} allowHalf />
-                  <Icon
-                      className={styles.delBtn}
-                      type="minus-circle-o"
-                      onClick={removeOptionItem}
-                      style={{fontSize:'20px'}}
-                    />
-                </p>;
+        return <Input style={{width:'30%',marginRight:'20px'}} onChange={changQuestion} />
+                
+              
       case '填空':
         return (<RadioGroup size="large" key={`填空${index}`} onChange={changQuestion}>
           {(() => {
             return fillType.map((item) => {
-                              return <RadioButton value={item} key={item + index} >{item}</RadioButton>;
-                            });
+              return <RadioButton value={item} key={item + index} >{item}</RadioButton>;
+            });
           })()}
         </RadioGroup>);
       case '文本':
         return <Slider range onAfterChange={changQuestion} />;
+    }
+  };
+  const optionsAdd = (item,index) => {
+    switch (type) {
+      case '单选':
+      case '多选':
+          return  <Icon
+                      className={styles.delBtn}
+                      type="minus-circle-o"
+                      onClick={removeOptionItem.bind(null,index)}
+                      style={{fontSize:'20px'}}
+                    />        
+      case '评分':
+        return   <span>
+                    <Rate character={<Icon type="heart" />} allowHalf />
+                    <Icon
+                        className={styles.delBtn}
+                        type="minus-circle-o"
+                        onClick={removeOptionItem.bind(null,index)}
+                        style={{fontSize:'20px'}}
+                      />
+                 </span>
+      default : 
+        return 
     }
   };
   const addItemEle = (index) => {
@@ -212,6 +222,7 @@ function EditQuestionItem({
                 {getFieldDecorator(`options[${index}]`, {
                   initialValue: item,
                 })(optionsEle(item,index))}
+                {optionsAdd()}
               </FormItem>
             );
           })}

@@ -93,11 +93,34 @@ export default {
       //3、option数组增加一个value
       //4、把新的option数组更新到question对象
       //5、把新的question更新到state
-      var index = R.findIndex(R.propEq("qId", payload),state.question);
+      // var index = R.findIndex(R.propEq("qId", payload),state.question);
+      // if(index > -1)
+      // {
+      //   var optionList = state.question[index].options;
+      //   optionList = R.append("增加选项", optionList);
+      //   var questionItem = R.assocPath(['options'], optionList, state.question[index]);
+      //   var stateTmp = R.assocPath(['question', index],questionItem, state);
+      //   return stateTmp;
+      // }
+      // else
+      // {
+      //   console.log("未找到questionItem")
+      // }
+
+      var index = R.findIndex(R.propEq("qId", payload),state.question);      
+      var optionList = state.question[index].options;      
+      let num = optionList.reduce((a,b) =>  {
+          if (/^选项(\d+)$/.exec(b) === null ) {
+              return a;
+            } else{
+              return Math.max(a, /^选项(\d+)$/.exec(b)[1]);
+            }
+        }, 0) +  1;
+
+      
       if(index > -1)
       {
-        var optionList = state.question[index].options;
-        optionList = R.append("增加选项", optionList);
+        optionList = R.append(`选项${num}`, optionList);
         var questionItem = R.assocPath(['options'], optionList, state.question[index]);
         var stateTmp = R.assocPath(['question', index],questionItem, state);
         return stateTmp;
@@ -106,6 +129,8 @@ export default {
       {
         console.log("未找到questionItem")
       }
+
+
     },
     removeOptionItem(state, {payload}){
           // console.log(payload);

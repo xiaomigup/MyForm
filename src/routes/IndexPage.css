@@ -55,3 +55,7 @@
 		box-shadow:1px 1px 100px #fff;
 	}
  }
+
+.rotate{
+    transform: rotateX(180deg);
+ }
