@@ -11,7 +11,8 @@ function CheckboxShowCom({
 }) { 
   return (
     <FormItem className={styles.normal}>
-            <div>{ti.title}</div>
+
+            <div className={ti.isReuired ? styles.requireStar : ""}>{ti.qId} . {ti.title}</div>
             <CheckboxGroup options={ti.options} defaultValue={ti.defaultValue} />     
     </FormItem>
   );

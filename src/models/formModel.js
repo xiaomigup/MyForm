@@ -1,3 +1,4 @@
+import R from 'ramda';
 
 export default {
   namespace: 'formModel',
@@ -70,6 +71,45 @@ export default {
         illustrate: payload,
       };
     },
+    changQuestion(state, { payload }) {
+      return R.assocPath(['question', R.findIndex(R.propEq('qId', payload.qId), state.question)], payload)(state);
+    },
+    delQuestion(state, { payload }) {
+      return R.dissocPath(['question', R.findIndex(R.propEq('qId', payload), state.question)])(state);
+    },
+    addQuestion(state, { payload }) {
+      return {
+        ...state,
+        question : R.insert(R.findIndex(R.propEq('qId', payload.thisqId), state.question)+1,{...payload,qId : 
+          R.reduce(function(a,b){
+            return Math.max(a,b.qId)
+        },0)(state.question) + 1})(state.question)
+      }
+    },
+    addOptionItem(state,{ payload }) {
+      //1、根据id找到question下标
+      //2、取出question对象的option数组
+      //3、option数组增加一个value
+      //4、把新的option数组更新到question对象
+      //5、把新的question更新到state
+      var index = R.findIndex(R.propEq("qId", payload),state.question);
+      if(index > -1)
+      {
+        var optionList = state.question[index].options;
+        optionList = R.append("增加选项", optionList);
+        var questionItem = R.assocPath(['options'], optionList, state.question[index]);
+        var stateTmp = R.assocPath(['question', index],questionItem, state);
+        return stateTmp;
+      }
+      else
+      {
+        console.log("未找到questionItem")
+      }
+    },
+    removeOptionItem(state, {payload}){
+      console.log(state);
+      console.log(payload);
+    }
   },
   effects: {},
   subscriptions: {},

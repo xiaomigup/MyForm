@@ -13,8 +13,6 @@ const app = dva({
 
 app.model(require("./models/signin"));
 
-app.model(require("./models/app"));
-
 app.model(require("./models/formModel"));
 
 app.model(require("./models/login"));

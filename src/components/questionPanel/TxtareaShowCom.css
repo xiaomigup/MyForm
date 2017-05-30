@@ -2,3 +2,8 @@
     margin-left: 200px;
     font-size: 20px;
 } 
+.requireStar::before{
+    content:"*";
+    transform: translate(-40px,0px);
+    color: red;
+}

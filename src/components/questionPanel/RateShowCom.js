@@ -9,13 +9,16 @@ function RateShowCom({
 }) {
   return (
     <FormItem className={styles.normal}>
-      <div>{ti.title}</div>
+      <div className={ti.isReuired ? styles.requireStar : ""}>{ti.qId} . {ti.title}</div>
       {(() => {
               return ti.options.map((item) => {
-                return (<div key={item} >
-                  <span>{item}</span>
-                  <Rate character={<Icon type="heart" />}  allowHalf />
-                </div>);
+                if(item && item !== ""){
+
+                    return (<div key={item} >
+                      <span style={{paddingRight:10}}>{item}</span>
+                      <Rate character={<Icon type="heart"/>} allowHalf />
+                    </div>);
+                }
               });
             })()}
     </FormItem>

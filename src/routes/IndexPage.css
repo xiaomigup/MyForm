@@ -37,9 +37,21 @@
     left : 0px;
 }
 .slideMove{
-    left : -85%;
+    left : -98%;
 }
 
 .onforce:focus{
     border-style: dashed;
 }
+
+.cur{
+	animation: faguang 1s ease 0s infinite alternate;
+    transform: translate(80%,0);
+}
+ @keyframes faguang{
+	from { box-shadow:1px 1px 1px lightskyblue;
+ 	}
+	to {
+		box-shadow:1px 1px 100px #fff;
+	}
+ }

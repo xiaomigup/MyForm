@@ -19,15 +19,18 @@ function QuestionPanel({ formModel }) {
   };
   // 返回单选题
    return (
-    <div style={{ overflow: 'auto', width: '100%', height: '100%' ,padding:200,background:'#eee' }}>
+    <div style={{ overflow: 'auto', width: '100%', height: '100%' ,padding:100,background:'#f7f7f7'}}>
 
-      <div style={{fontSize:30,textAlign:'center',width:'80%'}}>{formModel.topic}</div>
+        <div style={{fontSize:30,textAlign:'center'}}>{formModel.topic}</div>
         <p className={styles.illustrate}>{formModel.illustrate}</p>
       <Form onSubmit={handleSubmit} className="login-form">
         {(() => {
           return formModel.question.map((item) => {
             switch (item.type) {
               case '单选':
+                return <RadioShowCom ti={item} key={item.qId} />;
+                break;
+              case '多选':
                 return <CheckboxShowCom ti={item} key={item.qId} />;
                 break;
               case '评分':

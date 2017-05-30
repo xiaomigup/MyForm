@@ -1,7 +1,10 @@
 import React from 'react';
 import styles from './EditQuestionItem.css';
 import ChooseQuestion from './ChooseQuestion.js';
-import { Switch,Rate, Icon, Radio, Form, Input, Slider, Button, DatePicker, Select } from 'antd';
+import { Switch, Icon, Radio, Form, Input, Slider, Button, DatePicker, Select ,Rate} from 'antd';
+import { connect } from 'dva';
+import R from 'ramda'
+
 const FormItem = Form.Item;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -9,11 +12,9 @@ const RadioGroup = Radio.Group;
 const formItemLayout = {
   labelCol: {
     span: 6,
-    
   },
   wrapperCol: {
     span: 14,
-   
   },
 };
 const formAddItemLayout = {
@@ -41,37 +42,53 @@ function EditQuestionItem({
   options = [],
   defaultValue = [],
   index,
+  qId,
+  dispatch,
+  formModel,
  }) {
    // 发送改变
   const changQuestion = (e) => {
-    console.log(e.target);
     validateFields((errors) => {
-      console.log(errors);
-       if (errors) {
+      if (errors) {
         return;
       }
-       const data = {
-        ...getFieldsValue(),
-      };
-      console.log(getFieldsValue());
-      setTimeout(()=>{
-        console.log(getFieldsValue());
-      },0)
-     });
-  };
-//  增加一个选项
- const add = () => {
-    uuid++;
-    const { form } = this.props;
-    // can use data-binding to get
-    const keys = form.getFieldValue('keys');
-    const nextKeys = keys.concat(uuid);
-    // can use data-binding to set
-    // important! notify form to detect changes
-    form.setFieldsValue({
-      keys: nextKeys,
+      setTimeout(() => {
+        const data = {
+          ...getFieldsValue(),
+          qId,
+          type,
+          defaultValue,
+        };
+        if(type === '文本'){
+          data.options = new Array(options).fill('text')
+        }
+        dispatch({
+          type: 'formModel/changQuestion',
+          payload: data,
+        });
+      }, 0);
     });
+  };
+  //  增加一个选项
+ const addOptionItem = () => {
+   dispatch({
+          type: 'formModel/addOptionItem',
+          payload: qId,
+        });
   }
+  const removeOptionItem = () =>{
+      dispatch({
+          type: 'formModel/removeOptionItem',
+          payload: qId,
+          
+      });
+  }
+  const delQuestion = () => {
+    dispatch({
+      type: 'formModel/delQuestion',
+      payload: qId,
+    });
+  };
   const optionsLabel = (index) => {
     switch (type) {
       case '单选':
@@ -89,31 +106,32 @@ function EditQuestionItem({
     switch (type) {
       case '单选':
       case '多选':
-        return <p><Input style={{width:'80%',marginRight:'20px'}} /><Icon
+          return <p><Input style={{width:'80%',marginRight:'20px'}}  onChange={changQuestion}/><Icon
             className={styles.delBtn}
             type="minus-circle-o"
-            onClick={() => remove(k)}
+            onClick={removeOptionItem}
             style={{fontSize:'20px'}}
           /></p>
       case '评分':
-        return <p><Input style={{width:'30%',marginRight:'20px'}} /><Rate character={<Icon type="heart" />} allowHalf />
+        return <p><Input style={{width:'30%',marginRight:'20px'}} onChange={changQuestion} />
+                  <Rate character={<Icon type="heart" />} allowHalf />
                   <Icon
                       className={styles.delBtn}
                       type="minus-circle-o"
-                      onClick={() => remove(k)}
+                      onClick={removeOptionItem}
                       style={{fontSize:'20px'}}
                     />
                 </p>;
       case '填空':
-        return (<RadioGroup size="large" key={`填空${index}`}>
-                          {(() => {
-                                  return fillType.map((item) => {
-                                        return <RadioButton value={item} key={item + index}>{item}</RadioButton>;
-                                      });
-                                })()}
-                        </RadioGroup>);
+        return (<RadioGroup size="large" key={`填空${index}`} onChange={changQuestion}>
+          {(() => {
+            return fillType.map((item) => {
+                              return <RadioButton value={item} key={item + index} >{item}</RadioButton>;
+                            });
+          })()}
+        </RadioGroup>);
       case '文本':
-        return <Slider range />;
+        return <Slider range onAfterChange={changQuestion} />;
     }
   };
   const addItemEle = (index) => {
@@ -122,7 +140,7 @@ function EditQuestionItem({
       case '多选':
       case '评分':
         return <FormItem {...formAddItemLayout}>
-                  <Button type="dashed" onClick={add} style={{ width: '60%' }}>
+                  <Button type="dashed" onClick={addOptionItem} style={{ width: '60%' }}>
                     <Icon type="plus" /> 增加选项
                   </Button>
                 </FormItem>
@@ -145,29 +163,23 @@ function EditQuestionItem({
           </FormItem>
           <div className={styles.del}>
             <Button style={{ padding: 5 }}>
-              <Icon type="delete" />
+              <Icon type="delete" onClick={delQuestion} />
             </Button>
           </div>
         </div>
         <FormItem
           label="题型" {...formItemLayout}
         >
-          {getFieldDecorator('type', {
-            initialValue: type,
-          })(<RadioGroup size="large" onChange={changQuestion}>
-            {(() => {
-                return typeArr.map((item) => {
-                      return <RadioButton value={item} key={item}>{item}</RadioButton>;
-                    });
-            })()}
-          </RadioGroup>)}
+          <RadioGroup size="large">
+            <RadioButton value={type}>{type}</RadioButton>;
+          </RadioGroup>
         </FormItem>
         <FormItem
           label="题目" {...formItemLayout}
         >
           {getFieldDecorator('title', {
             initialValue: title,
-          })(<Input />)}
+          })(<Input onChange={changQuestion} />)}
         </FormItem>
 
         <div>选项内容</div>
@@ -179,7 +191,7 @@ function EditQuestionItem({
                 label={optionsLabel(index)} {...formItemLayout}
                 key={index}
               >
-                {getFieldDecorator(`option${index}`, {
+                {getFieldDecorator(`options[${index}]`, {
                   initialValue: item,
                 })(optionsEle(index))}
               </FormItem>
@@ -187,11 +199,12 @@ function EditQuestionItem({
           });
         })()}
         {addItemEle(index)}
-        <Button className={styles.icon}><Icon type="plus" style={{ transform: 'translate(0px,-4px)',fontSize:'30px' }} /></Button>
+        <Button className={styles.icon}><Icon type="plus" style={{ transform: 'translate(0px,-3px)',fontSize:'30px'}} /></Button>
       </Form>
-          <ChooseQuestion></ChooseQuestion>
+      <ChooseQuestion qId={qId} />
+
     </div>
   );
 }
 
-export default Form.create()(EditQuestionItem);
+export default connect(({ formModel }) => ({ formModel }))(Form.create()(EditQuestionItem));
