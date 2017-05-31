@@ -6,11 +6,11 @@ import { Input, Form, Icon  , Button } from 'antd';
 
 const FormItem = Form.Item;
 function TxtareaShowCom({
-  ti
+  ti,index
 }) { 
   return (
     <FormItem className={styles.normal}>
-            <div className={ti.isReuired ? styles.requireStar : ""}>{ti.qId} . {ti.title}</div>
+            <div className={ti.isReuired ? styles.requireStar : ""}>{index} . {ti.title}</div>
             <Input type="textarea" rows={4} style={{width:500}}/>     
     </FormItem>
   );

@@ -5,11 +5,11 @@ import { Rate, Form, Icon, Input, Button } from 'antd';
 
 const FormItem = Form.Item;
 function RateShowCom({
-  ti,
+  ti,index
 }) {
   return (
     <FormItem className={styles.normal}>
-      <div className={ti.isReuired ? styles.requireStar : ""}>{ti.qId} . {ti.title}</div>
+      <div className={ti.isReuired ? styles.requireStar : ""}>{index} . {ti.title}</div>
       {(() => {
               return ti.options.map((item) => {
                 if(item && item !== ""){

@@ -5,7 +5,7 @@ import ChooseQuestion from './ChooseQuestion.js';
 import { Form, Input, InputNumber, Modal, Button,Icon } from 'antd';
 
 class EditTopicItem extends React.Component {
-   constructor({ changeTopic, defaultTopic, changeIllustrate, defaultIll }){
+   constructor(){
     super();
     this.state = {
       isChooseBoxShow : false,
@@ -15,9 +15,17 @@ class EditTopicItem extends React.Component {
     this.setState({
       isChooseBoxShow : !this.state.isChooseBoxShow
     });
-      console.log('====================================');
-      console.log(this.state.isChooseBoxShow);
-      console.log('====================================');
+  }
+  changeBoxshow = () => {
+    let data = -1
+    if(this.props.formModel.chooseBoxShow === -1){
+      data = -2
+    }
+    console.log(data);
+    this.props.dispatch({
+          type: 'formModel/changeBoxshow',
+          payload: data,
+        });
   }
   render(){
   return (
@@ -31,14 +39,12 @@ class EditTopicItem extends React.Component {
           <div>请编辑问卷描述</div>
           <Input type="textarea" placeholder="请编辑问卷描述" className={styles.onforce} onBlur={this.props.changeIllustrate} defaultValue={this.props.defaultIll} />
         </div>
-        <Button className={styles.icon}><Icon type="plus" style={{transform: 'translate(0px,-3px)',fontSize:'30px'}} onClick={this.changeState}/></Button>
+        <Button className={styles.icon}><Icon type="plus" style={{transform: 'translate(0px,-3px)',fontSize:'30px'}} onClick={this.changeBoxshow}/></Button>
       </div>
-      {/*<div className={ this.state.isChooseBoxShow ? styles.chooseBoxShow : "" } style={{display:'none'}} >*/}
-         {this.state.isChooseBoxShow ? <ChooseQuestion  qId={-1} /> : ''} 
-      {/*</div>*/}
+         {this.props.formModel.chooseBoxShow === -1 ? <ChooseQuestion  qId={-1} /> : ''} 
     </div>
    );
   }
 }
 
-export default connect()(EditTopicItem);
+export default connect(({ formModel }) => ({ formModel }))(EditTopicItem);

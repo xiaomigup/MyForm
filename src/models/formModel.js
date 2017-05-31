@@ -6,7 +6,8 @@ export default {
     topic: '卷的标题',
     illustrate: '卷说明',
     id: 0,
-    optionChooseBox : 0,
+    optionChooseBox: 0,
+    chooseBoxShow: -2,
     question: [
       // 单选0
       {
@@ -60,6 +61,12 @@ export default {
     ],
   },
   reducers: {
+    changeBoxshow(state,{payload}){
+      return {
+        ...state,
+        chooseBoxShow: payload,
+      }
+    },
     changeTopic(state, { payload }) {
       return {
         ...state,
@@ -81,18 +88,19 @@ export default {
     addQuestion(state, { payload }) {
       return {
         ...state,
-        question : R.insert(R.findIndex(R.propEq('qId', payload.thisqId), state.question)+1,{...payload,qId : 
-          R.reduce(function(a,b){
-            return Math.max(a,b.qId)
-        },0)(state.question) + 1})(state.question)
-      }
+        question: R.insert(R.findIndex(R.propEq('qId', payload.thisqId), state.question) + 1, { ...payload, 
+qId:
+          R.reduce((a,b) =>  {
+            return Math.max(a, b.qId);
+          }, 0)(state.question) + 1 })(state.question),
+      };
     },
-    addOptionItem(state,{ payload }) {
-      //1、根据id找到question下标
-      //2、取出question对象的option数组
-      //3、option数组增加一个value
-      //4、把新的option数组更新到question对象
-      //5、把新的question更新到state
+    addOptionItem(state, { payload }) {
+      // 1、根据id找到question下标
+      // 2、取出question对象的option数组
+      // 3、option数组增加一个value
+      // 4、把新的option数组更新到question对象
+      // 5、把新的question更新到state
       // var index = R.findIndex(R.propEq("qId", payload),state.question);
       // if(index > -1)
       // {
@@ -107,32 +115,27 @@ export default {
       //   console.log("未找到questionItem")
       // }
 
-      var index = R.findIndex(R.propEq("qId", payload),state.question);      
-      var optionList = state.question[index].options;      
-      let num = optionList.reduce((a,b) =>  {
-          if (/^选项(\d+)$/.exec(b) === null ) {
-              return a;
-            } else{
-              return Math.max(a, /^选项(\d+)$/.exec(b)[1]);
-            }
-        }, 0) +  1;
+      let index = R.findIndex(R.propEq('qId', payload), state.question);
+      let optionList = state.question[index].options;
+      const num = optionList.reduce((a, b) => {
+        if (/^选项(\d+)$/.exec(b) === null) {
+            return a;
+          } else {
+            return Math.max(a, /^选项(\d+)$/.exec(b)[1]);
+          }
+      }, 0) + 1;
 
-      
-      if(index > -1)
-      {
+
+      if (index > -1)      {
         optionList = R.append(`选项${num}`, optionList);
-        var questionItem = R.assocPath(['options'], optionList, state.question[index]);
-        var stateTmp = R.assocPath(['question', index],questionItem, state);
+        let questionItem = R.assocPath(['options'], optionList, state.question[index]);
+        let stateTmp = R.assocPath(['question', index], questionItem, state);
         return stateTmp;
+      }      else      {
+        console.log('未找到questionItem');
       }
-      else
-      {
-        console.log("未找到questionItem")
-      }
-
-
     },
-    removeOptionItem(state, {payload}){
+    removeOptionItem(state, { payload }) {
           // console.log(payload);
           // var index = R.findIndex(R.propEq("qId", payload),state.question);
           // if(index > -1)
@@ -148,17 +151,16 @@ export default {
           // {
           //   console.log("未找到questionItem")
           // }
-          var questionIndex = R.findIndex(R.propEq("qId", payload.qId), state.question);
-          console.log("+++++++++++++" + questionIndex);
-          console.log("+++++++++++++" + state);
-          if(questionIndex > -1)
-          {
-            var optionList = state.question[questionIndex].options;
-            optionList = R.remove(payload.index,1)(optionList);
-            console.log("+++++++++++++" + optionList);
-            var questionItem = R.assocPath(['options'], optionList, state.question[questionIndex]);
-            var stateTmp = R.assocPath(['question', questionIndex],questionItem, state);
-            console.log("*************" +stateTmp);
+      let questionIndex = R.findIndex(R.propEq('qId', payload.qId), state.question);
+      console.log('+++++++++++++' + questionIndex);
+      console.log('+++++++++++++' + state);
+      if (questionIndex > -1)          {
+            let optionList = state.question[questionIndex].options;
+            optionList = R.remove(payload.index, 1)(optionList);
+            console.log('+++++++++++++' + optionList);
+            let questionItem = R.assocPath(['options'], optionList, state.question[questionIndex]);
+            let stateTmp = R.assocPath(['question', questionIndex], questionItem, state);
+            console.log('*************' + stateTmp);
             return stateTmp;
           }
     },

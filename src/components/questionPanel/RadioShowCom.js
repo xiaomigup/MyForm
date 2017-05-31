@@ -6,11 +6,11 @@ const RadioGroup = Radio.Group;
 
 const FormItem = Form.Item;
 function RadioShowCom({
-  ti
+  ti,index
 }) { 
   return (
     <FormItem className={styles.normal}>
-            <div className={ti.isReuired ? styles.requireStar : ""}>{ti.qId} . {ti.title}</div>
+            <div className={ti.isReuired ? styles.requireStar : ""}>{index} . {ti.title}</div>
             <RadioGroup options={ti.options} defaultValue={ti.defaultValue[0]} />     
     </FormItem>
   );

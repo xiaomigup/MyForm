@@ -5,10 +5,11 @@ import { Input, Form } from 'antd';
 
 const FormItem = Form.Item;
 function FillShowCom({
-  ti,
+  ti,index
 }) {
   return (
     <FormItem className={styles.normal}>
+      <div className={ti.isReuired ? styles.requireStar : ""}>{index} . {ti.type}</div>
       <div>{(() => {
          let i = 0;        
        return ti.title.split(/(\_{3,})/g).map((item,index) => {

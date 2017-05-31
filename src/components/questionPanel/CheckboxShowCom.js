@@ -7,12 +7,13 @@ const CheckboxGroup = Checkbox.Group;
 
 const FormItem = Form.Item;
 function CheckboxShowCom({
-  ti
+  ti,
+  index
 }) { 
   return (
     <FormItem className={styles.normal}>
 
-            <div className={ti.isReuired ? styles.requireStar : ""}>{ti.qId} . {ti.title}</div>
+            <div className={ti.isReuired ? styles.requireStar : ""}>{index} . {ti.title}</div>
             <CheckboxGroup options={ti.options} defaultValue={ti.defaultValue} />     
     </FormItem>
   );

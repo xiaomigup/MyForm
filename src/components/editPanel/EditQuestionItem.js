@@ -80,6 +80,16 @@ function EditQuestionItem({
       }, 0);
     });
   };
+  const changeBoxshow = () => {
+    let data = qId
+    if(formModel.chooseBoxShow === qId){
+      data = -2
+    }
+    dispatch({
+          type: 'formModel/changeBoxshow',
+          payload: data,
+        });
+  }
   //  增加一个选项
  const addOptionItem = () => {
    dispatch({
@@ -180,7 +190,7 @@ function EditQuestionItem({
   };
   return (
     <div style={{marginTop: 20}}>
-
+      <div>第{index+1}题</div>
       <Form layout="horizontal" className={styles.normal}>
         <div>
           <FormItem
@@ -200,7 +210,7 @@ function EditQuestionItem({
           label="题型" {...formItemLayout}
         >
           <RadioGroup size="large">
-            <RadioButton value={type}>{type}</RadioButton>;
+            <RadioButton value={type}>{type}</RadioButton>
           </RadioGroup>
         </FormItem>
         <FormItem
@@ -227,10 +237,9 @@ function EditQuestionItem({
             );
           })}
         {addItemEle(index)}
-        <Button className={styles.icon}><Icon type="plus" style={{ transform: 'translate(0px,-3px)',fontSize:'30px'}} /></Button>
+        <Button className={styles.icon}><Icon type="plus" style={{ transform: 'translate(0px,-3px)',fontSize:'30px'}} onClick={changeBoxshow}/></Button>
       </Form>
-      <ChooseQuestion qId={qId} />
-
+      {formModel.chooseBoxShow === qId ? <ChooseQuestion  qId={qId} /> : ''} 
     </div>
   );
 }

@@ -25,22 +25,22 @@ function QuestionPanel({ formModel }) {
         <p className={styles.illustrate}>{formModel.illustrate}</p>
       <Form onSubmit={handleSubmit} className="login-form">
         {(() => {
-          return formModel.question.map((item) => {
+          return formModel.question.map((item,index) => {
             switch (item.type) {
               case '单选':
-                return <RadioShowCom ti={item} key={item.qId} />;
+                return <RadioShowCom ti={item} key={index} index={index+1} />;
                 break;
               case '多选':
-                return <CheckboxShowCom ti={item} key={item.qId} />;
+                return <CheckboxShowCom ti={item} key={index} index={index+1}/>;
                 break;
               case '评分':
-                return <RateShowCom ti={item} key={item.qId} />;
+                return <RateShowCom ti={item} key={index} index={index+1}/>;
                 break;
               case '填空':
-                return <FillShowCom ti={item} key={item.qId} />;
+                return <FillShowCom ti={item} key={index} index={index+1}/>;
                 break;
               case '文本':
-                return <TxtareaShowCom ti={item} key={item.qId} />;
+                return <TxtareaShowCom ti={item} key={index} index={index+1}/>;
                 break;
               default:
                 break;
